@@ -29,6 +29,7 @@ public class TopicFeed(ApplicationDbContext db) : WikiViewComponent
 				p.EnableHtml,
 				p.Text,
 				p.Subject,
+				p.Topic!.Title,
 				p.Poster!.UserName,
 				p.CreateTimestamp))
 			.Take(l ?? 5)
@@ -37,5 +38,5 @@ public class TopicFeed(ApplicationDbContext db) : WikiViewComponent
 		return View();
 	}
 
-	public record TopicPost(int Id, bool EnableBbCode, bool EnableHtml, string Text, string? Subject, string PosterName, DateTime CreateTimestamp);
+	public record TopicPost(int Id, bool EnableBbCode, bool EnableHtml, string Text, string? Subject, string Title, string PosterName, DateTime CreateTimestamp);
 }
