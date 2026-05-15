@@ -3,7 +3,7 @@ using TASVideos.Core.Services.Wiki;
 namespace TASVideos.Pages.Wiki;
 
 [RequirePermission(PermissionTo.MoveWikiPages)]
-public class MoveModel(IWikiPages wikiPages, IExternalMediaPublisher publisher, ApplicationDbContext db) : BasePageModel
+public class MoveModel(IWikiPages wikiPages, IExternalMediaPublisher publisher, IWikiRedirectService wikiRedirectService, ApplicationDbContext db) : BasePageModel
 {
 	[FromQuery]
 	public string? Path { get; set; }
@@ -50,45 +50,30 @@ public class MoveModel(IWikiPages wikiPages, IExternalMediaPublisher publisher, 
 			return Page();
 		}
 
+		var transaction = await db.BeginTransactionAsync();
+
 		if (LeaveRedirect)
 		{
-			if (await db.WikiRedirects.AnyAsync(r => r.PageNameTo == OriginalPageName))
+			var redirectResult = await wikiRedirectService.Add(new WikiRedirect
 			{
-				ModelState.AddModelError("", $"Another page already redirects to '{OriginalPageName}'. Avoid chaining redirects.");
-				return Page();
-			}
+				PageNameFrom = OriginalPageName,
+				PageNameTo = DestinationPageName
+			});
 
-			if (await db.WikiRedirects.AnyAsync(r => r.PageNameFrom == DestinationPageName))
+			switch (redirectResult)
 			{
-				ModelState.AddModelError("", $"Page name '{DestinationPageName}' already redirects to a different page. Avoid chaining redirects.");
-				return Page();
-			}
-
-			WikiRedirect wikiRedirect = new();
-			wikiRedirect.PageNameTo = DestinationPageName;
-			wikiRedirect.PageNameFrom = OriginalPageName;
-
-			db.WikiRedirects.Add(wikiRedirect);
-
-			try
-			{
-				await db.SaveChangesAsync();
-			}
-			catch (DbUpdateConcurrencyException)
-			{
-				ErrorStatusMessage("Unable to edit redirects due to an unknown error");
-				return Page();
-			}
-			catch (DbUpdateException ex)
-			{
-				if (ex.InnerException?.Message.Contains("unique constraint") ?? false)
-				{
+				case WikiRedirectAddEditResult.ChainedRedirectFrom:
+					ModelState.AddModelError("", $"Another page already redirects to '{OriginalPageName}'. Avoid chaining redirects.");
+					return Page();
+				case WikiRedirectAddEditResult.ChainedRedirectTo:
+					ModelState.AddModelError("", $"Page name '{DestinationPageName}' already redirects to a different page. Avoid chaining redirects.");
+					return Page();
+				case WikiRedirectAddEditResult.DuplicateSource:
 					ModelState.AddModelError("", $"Redirect from '{OriginalPageName}' already exists. Avoid overlapping redirects.");
 					return Page();
-				}
-
-				ErrorStatusMessage("Unable to edit redirects due to an unknown error");
-				return Page();
+				case WikiRedirectAddEditResult.Fail:
+					ErrorStatusMessage("Unable to edit redirects due to an unknown error");
+					return Page();
 			}
 
 			SuccessStatusMessage("Redirect successfully created.");
@@ -96,17 +81,19 @@ public class MoveModel(IWikiPages wikiPages, IExternalMediaPublisher publisher, 
 
 		var result = await wikiPages.Move(OriginalPageName, DestinationPageName, User.GetUserId());
 
-		if (!result)
+		if (result)
 		{
-			ModelState.AddModelError("", "Unable to move page, the page may have been modified during the saving of this operation.");
-			return Page();
+			await transaction.CommitAsync();
+
+			await publisher.SendWiki(
+				$"Page {OriginalPageName} moved to [{DestinationPageName}]({{0}}) by {User.Name()}",
+				"",
+				DestinationPageName);
+
+			return BaseRedirect("/" + DestinationPageName);
 		}
 
-		await publisher.SendWiki(
-			$"Page {OriginalPageName} moved to [{DestinationPageName}]({{0}}) by {User.Name()}",
-			"",
-			DestinationPageName);
-
-		return BaseRedirect("/" + DestinationPageName);
+		ModelState.AddModelError("", "Unable to move page, the page may have been modified during the saving of this operation.");
+		return Page();
 	}
 }
