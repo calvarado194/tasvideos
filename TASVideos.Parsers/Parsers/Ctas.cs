@@ -23,15 +23,28 @@ internal class Ctas : Parser, IParser
 				return InvalidFormat();
 			}
 
-			reader.ReadUInt32();
-			result.Frames = reader.ReadInt32();
-			int rngLen = reader.ReadInt32();
+			var version = reader.ReadUInt32();
+			var framecount = reader.ReadUInt32();
+			var rngLen = reader.ReadUInt32();
+			uint reportedTime = 0;
 
-			byte[] buf = new byte[1008];
+			if (version >= 4)
+			{
+				result.RerecordCount = (int)reader.ReadUInt32();
+				reportedTime = reader.ReadUInt32();
+				result.Frames = (int)(reportedTime / (1000 / 60));
+				byte[] buf = new byte[1000];
 
-			reader.Read(buf);
+				reader.Read(buf);
+			}
+			else
+			{
+				byte[] buf = new byte[1008];
 
-			for (int i = 0; i < result.Frames; i++)
+				reader.Read(buf);
+			}
+
+			for (int i = 0; i < framecount; i++)
 			{
 				reader.ReadUInt64();
 			}
@@ -39,7 +52,12 @@ internal class Ctas : Parser, IParser
 			for (int i = 0; i < rngLen; i++)
 			{
 				reader.ReadInt32();
-				reader.ReadInt64();
+				reader.ReadDouble();
+			}
+
+			if (reportedTime <= 0)
+			{
+				result.Frames = (int)framecount;
 			}
 		}
 		catch (System.IO.EndOfStreamException)
