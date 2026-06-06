@@ -26,12 +26,12 @@ internal class Ctas : Parser, IParser
 			var version = reader.ReadUInt32();
 			var framecount = reader.ReadUInt32();
 			var rngLen = reader.ReadUInt32();
-			uint reportedTime = 0;
+			double reportedTime = 0;
 
 			if (version >= 4)
 			{
 				result.RerecordCount = (int)reader.ReadUInt32();
-				reportedTime = reader.ReadUInt32();
+				reportedTime = reader.ReadUInt32() / 1000.0;
 				result.Frames = (int)(reportedTime / (1000 / 60));
 				byte[] buf = new byte[1000];
 
@@ -55,9 +55,10 @@ internal class Ctas : Parser, IParser
 				reader.ReadDouble();
 			}
 
-			if (reportedTime <= 0)
+			result.Frames = (int)framecount;
+			if (version >= 4)
 			{
-				result.Frames = (int)framecount;
+				result.FrameRateOverride = result.Frames / reportedTime;
 			}
 		}
 		catch (System.IO.EndOfStreamException)
