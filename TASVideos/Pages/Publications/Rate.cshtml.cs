@@ -56,18 +56,16 @@ public class RateModel(IPublications publications, IRatingService ratingService)
 
 	public async Task<IActionResult> OnPostInline()
 	{
-		Rating = await JsonSerializer.DeserializeAsync<string?>(Request.Body);
-		ModelState.ClearValidationState(nameof(Rating));
-		if (Rating is not null && !TryValidateModel(Rating, nameof(Rating)))
+		var rating = await JsonSerializer.DeserializeAsync<string?>(Request.Body);
+		var ratingValue = RatingString.AsRatingDouble(rating);
+
+		if (rating is not null && ratingValue is not (>= 0 and <= 10))
 		{
 			return BadRequest();
 		}
 
-		var ratingValue = RatingString.AsRatingDouble(Rating);
 		await ratingService.UpdateUserRating(User.GetUserId(), Id, ratingValue);
-
 		OverallRating = await ratingService.GetOverallRatingForPublication(Id);
-
 		return Json(new { OverallRating = OverallRating.ToOverallRatingString() });
 	}
 }
