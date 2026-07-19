@@ -34,6 +34,15 @@ public class EditModel(
 	public List<SelectListItem> AvailableClasses { get; set; } = [];
 	public List<SelectListItem> AvailableRejectionReasons { get; set; } = [];
 
+	public List<SelectListItem> AvailableOptimizationGoals { get; set; } = Enum.GetValues<OptimizationMetric>().ToList().ConvertAll<SelectListItem>(g =>
+	{
+		return new SelectListItem() {
+			Text = g.EnumDisplayName(),
+			Value = g.ToString(),
+			Selected = false
+		};
+	});
+
 	public async Task<IActionResult> OnGet()
 	{
 		var submission = await db.Submissions
@@ -170,6 +179,8 @@ public class EditModel(
 			Submission.EncodeEmbedLink,
 			Submission.Authors,
 			Submission.ExternalAuthors,
+			Submission.Metric,
+			Submission.MetricValue,
 			Submission.Status,
 			MarkupChanged,
 			Markup,
@@ -322,6 +333,8 @@ public class EditModel(
 		[Url]
 		public string? EncodeEmbedLink { get; init; }
 		public List<string> Authors { get; set; } = [];
+		public OptimizationMetric Metric { get; set; }
+		public string? MetricValue { get; set; }
 		public string? Submitter { get; init; }
 		public DateTime SubmitDate { get; init; }
 		public SubmissionStatus Status { get; init; }

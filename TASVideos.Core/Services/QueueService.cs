@@ -457,6 +457,9 @@ internal class QueueService(
 		submission.Status = request.Status;
 		submission.AdditionalAuthors = request.ExternalAuthors.NormalizeCsv();
 
+		submission.Metric = request.Metric;
+		submission.MetricValue = request.MetricValue;
+
 		submission.SubmissionAuthors.Clear();
 		submission.SubmissionAuthors.AddRange(await db.Users
 			.ToSubmissionAuthors(submission.Id, request.Authors)
@@ -619,6 +622,8 @@ internal class QueueService(
 				EmulatorVersion = request.Emulator,
 				EncodeEmbedLink = youtubeSync.ConvertToEmbedLink(request.EncodeEmbeddedLink),
 				AdditionalAuthors = request.ExternalAuthors.NormalizeCsv(),
+				Metric = request.Metric,
+				MetricValue = request.MetricValue,
 				MovieFile = request.MovieFile,
 				Submitter = request.Submitter,
 				MovieStartType = mapResult.MovieStartType,
@@ -1046,6 +1051,8 @@ public record SubmitRequest(
 	string? EncodeEmbeddedLink,
 	IList<string> Authors,
 	string? ExternalAuthors,
+	OptimizationMetric Metric,
+	string? MetricValue,
 	string Markup,
 	byte[] MovieFile,
 	IParseResult ParseResult,
@@ -1108,6 +1115,8 @@ public record UpdateSubmissionRequest(
 	string? EncodeEmbedLink,
 	List<string> Authors,
 	string? ExternalAuthors,
+	OptimizationMetric Metric,
+	string? MetricValue,
 	SubmissionStatus Status,
 	bool MarkupChanged,
 	string? Markup,
