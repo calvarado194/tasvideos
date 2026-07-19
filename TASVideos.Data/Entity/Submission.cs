@@ -58,10 +58,10 @@ public class Submission : BaseEntity, ITimeable
 	public GameSystemFrameRate? SystemFrameRate { get; set; }
 
 	// The thing that the movie has primarily being optimized for
-	public OptimizationCriteria Criteria { get; set; } = OptimizationCriteria.TASTiming;
+	public OptimizationMetric Metric { get; set; } = OptimizationMetric.TASTiming;
 
 	// The reported value the movie achieved on that reported criteria. This is either time (measured to miliseconds) or score (as an integer number)
-	public decimal MeasuredValue { get; set; }
+	public string? MetricValue { get; set; }
 
 	public Publication? Publication { get; set; }
 
@@ -138,23 +138,23 @@ public class Submission : BaseEntity, ITimeable
 			_ => goal
 		};
 
-		if (Criteria.IsScore())
+		if (Metric.IsScore())
 		{
 			// we need a better title scheme for scores!
 			Title =
 			$"#{Id}: {string.Join(", ", authorList).LastCommaToAmpersand()}'s {System?.Code ?? "Unknown"} {gameName}"
 				+ (!string.IsNullOrWhiteSpace(goal) ? $" \"{goal}\"" : "")
-				+ $" - Score: {MeasuredValue}";
+				+ $" - Score: {MetricValue}";
 
 			return;
 		}
 
-		if (Criteria.IsTimeOverride())
+		if (Metric.IsTimeOverride())
 		{
 			Title =
 			$"#{Id}: {string.Join(", ", authorList).LastCommaToAmpersand()}'s {System?.Code ?? "Unknown"} {gameName}"
 				+ (!string.IsNullOrWhiteSpace(goal) ? $" \"{goal}\"" : "")
-				+ $" in {TimeSpan.FromMilliseconds(decimal.ToDouble(MeasuredValue)).ToStringWithOptionalDaysAndHours()}";
+				+ $" in {MetricValue}";
 			return;
 		}
 
