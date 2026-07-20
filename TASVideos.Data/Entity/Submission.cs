@@ -57,6 +57,12 @@ public class Submission : BaseEntity, ITimeable
 	public int? SystemFrameRateId { get; set; }
 	public GameSystemFrameRate? SystemFrameRate { get; set; }
 
+	// The thing that the movie has primarily being optimized for
+	public OptimizationMetric Metric { get; set; } = OptimizationMetric.TASTiming;
+
+	// The reported value the movie achieved on that reported criteria. This is either time (measured to miliseconds) or score (as an integer number)
+	public string? MetricValue { get; set; }
+
 	public Publication? Publication { get; set; }
 
 	public int Frames { get; set; }
@@ -131,6 +137,26 @@ public class Submission : BaseEntity, ITimeable
 			"baseline" => null,
 			_ => goal
 		};
+
+		if (Metric.IsScore())
+		{
+			// we need a better title scheme for scores!
+			Title =
+			$"#{Id}: {string.Join(", ", authorList).LastCommaToAmpersand()}'s {System?.Code ?? "Unknown"} {gameName}"
+				+ (!string.IsNullOrWhiteSpace(goal) ? $" \"{goal}\"" : "")
+				+ $" ({MetricValue}) in {this.Time().ToStringWithOptionalDaysAndHours()}";
+
+			return;
+		}
+
+		if (Metric.IsTimeOverride())
+		{
+			Title =
+			$"#{Id}: {string.Join(", ", authorList).LastCommaToAmpersand()}'s {System?.Code ?? "Unknown"} {gameName}"
+				+ (!string.IsNullOrWhiteSpace(goal) ? $" \"{goal}\"" : "")
+				+ $" in {MetricValue}";
+			return;
+		}
 
 		Title =
 		$"#{Id}: {string.Join(", ", authorList).LastCommaToAmpersand()}'s {System?.Code ?? "Unknown"} {gameName}"

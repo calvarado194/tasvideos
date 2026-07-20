@@ -3,6 +3,7 @@ using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -13,9 +14,11 @@ using TASVideos.Data;
 namespace TASVideos.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260719223101_AltTimingMigration")]
+    partial class AltTimingMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -557,10 +560,6 @@ namespace TASVideos.Data.Migrations
                         .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ContentType")
-                        .HasColumnType("integer")
-                        .HasColumnName("content_type");
 
                     b.Property<DateTime>("CreateTimestamp")
                         .HasColumnType("timestamp without time zone")
@@ -2580,43 +2579,6 @@ namespace TASVideos.Data.Migrations
                         .HasName("pk_wiki_referrals");
 
                     b.ToTable("wiki_referrals", (string)null);
-                });
-
-            modelBuilder.Entity("TASVideos.Data.Entity.WikiRedirect", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreateTimestamp")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("create_timestamp");
-
-                    b.Property<DateTime>("LastUpdateTimestamp")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("last_update_timestamp");
-
-                    b.Property<string>("PageNameFrom")
-                        .IsRequired()
-                        .HasColumnType("citext")
-                        .HasColumnName("page_name_from");
-
-                    b.Property<string>("PageNameTo")
-                        .IsRequired()
-                        .HasColumnType("citext")
-                        .HasColumnName("page_name_to");
-
-                    b.HasKey("Id")
-                        .HasName("pk_wiki_redirects");
-
-                    b.HasIndex("PageNameFrom")
-                        .IsUnique()
-                        .HasDatabaseName("ix_wiki_redirects_page_name_from");
-
-                    b.ToTable("wiki_redirects", (string)null);
                 });
 
             modelBuilder.Entity("TASVideos.Data.Entity.Awards.PublicationAward", b =>

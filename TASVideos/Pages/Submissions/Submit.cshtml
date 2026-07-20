@@ -75,6 +75,22 @@
 				<div>Embedded link to a video of your movie. Must be YouTube or niconico.</div>
 				<span asp-validation-for="EncodeEmbeddedLink"></span>
 			</fieldset>
+			<fieldset>
+				<label asp-for="Metric"></label>
+				<select asp-for="Metric" asp-items="@Model.AvailableOptimizationGoals" data-id="metric"></select>
+				<div>What your movie is optimized for. Can be time (such as in-game time or some speedrun timer) or score. By default, we use
+					TAS timing as measured by the site parser. 
+				</div>
+				<span asp-validation-for="Metric"></span>
+			</fieldset>
+			<fieldset>
+				<label>Final Time/Score</label>
+				<input asp-for="MetricValue" placeholder="Example: 21:23.330, 1:14:04.44 or 284581040" />
+				<div>If you are using a value other than TAS timing, write it down here. If it is not provided by the game, please include how
+					to measure it in your submission notes.
+				</div>
+				<span asp-validation-for="MetricValue"></span>
+			</fieldset>
 		</column>
 	</row>
 	<fullrow>

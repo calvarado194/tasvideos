@@ -73,6 +73,12 @@ public class Publication : BaseEntity, ITimeable
 	public int Frames { get; set; }
 	public int RerecordCount { get; set; }
 
+	// The thing that the movie has primarily being optimized for
+	public OptimizationMetric Metric { get; set; } = OptimizationMetric.TASTiming;
+
+	// The reported value the movie achieved on that reported criteria. This is either time (measured to miliseconds) or score (as an integer number)
+	public string? MetricValue { get; set; }
+
 	/// <summary>
 	/// Gets or sets Any author's that are not a user. If they are a user, they should be linked, and not listed here.
 	/// </summary>
@@ -120,20 +126,33 @@ public class Publication : BaseEntity, ITimeable
 			goal = "";
 		}
 
+		var title = $"{System.Code} {gameName}"
+					+ (!string.IsNullOrWhiteSpace(goal) ? $" \"{goal}\"" : "");
+
+		string? timeTitle;
+		if (Metric.IsScore())
+		{
+			timeTitle = $" - Score {MetricValue}";
+		}
+		else if (Metric.IsTimeOverride())
+		{
+			timeTitle = $" in {MetricValue}";
+		}
+		else
+		{
+			timeTitle = $" in {this.Time().ToStringWithOptionalDaysAndHours()}";
+		}
+
 		if (isYouTubeTitle)
 		{
-			return
-				$"{System.Code} {gameName}"
-				+ (!string.IsNullOrWhiteSpace(goal) ? $" \"{goal}\"" : "")
-				+ $" in {this.Time().ToStringWithOptionalDaysAndHours()}"
+			return title + timeTitle
 				+ $" by {string.Join(", ", authorList).LastCommaToAmpersand()}";
 		}
 
 		return
-			$"{System.Code} {gameName}"
-			+ (!string.IsNullOrWhiteSpace(goal) ? $" \"{goal}\"" : "")
+			title
 			+ $" by {string.Join(", ", authorList).LastCommaToAmpersand()}"
-			+ $" in {this.Time().ToStringWithOptionalDaysAndHours()}";
+			+ timeTitle;
 	}
 }
 

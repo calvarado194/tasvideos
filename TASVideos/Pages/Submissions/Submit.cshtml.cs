@@ -1,4 +1,6 @@
 using System.Globalization;
+using Microsoft.ClearScript.JavaScript;
+using Npgsql.Internal;
 using TASVideos.Core.Services.Wiki;
 using TASVideos.MovieParsers;
 
@@ -55,7 +57,22 @@ public class SubmitModel(
 	[Required]
 	public IFormFile? MovieFile { get; init; }
 
+	[BindProperty]
+	public OptimizationMetric Metric { get; init; } = OptimizationMetric.TASTiming;
+
+	[BindProperty]
+	public string? MetricValue { get; init; }
+
 	public IEnumerable<string> MovieFileAccepts { get; init; } = movieParser.SupportedMovieExtensions;
+
+	public List<SelectListItem> AvailableOptimizationGoals { get; set; } = Enum.GetValues<OptimizationMetric>().ToList().ConvertAll<SelectListItem>(g =>
+	{
+		return new SelectListItem() {
+			Text = g.EnumDisplayName(),
+			Value = g.ToString(),
+			Selected = false
+		};
+	});
 
 	[BindProperty]
 	[MustBeTrue(ErrorMessage = "You must read and follow the instructions.")]
@@ -125,6 +142,8 @@ public class SubmitModel(
 			EncodeEmbeddedLink,
 			Authors,
 			ExternalAuthors,
+			Metric,
+			MetricValue,
 			Markup,
 			zippedMovieFileBytes,
 			parseResult,

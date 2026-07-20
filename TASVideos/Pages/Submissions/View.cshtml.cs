@@ -1,3 +1,4 @@
+using TASVideos.Common;
 using TASVideos.Core.Services.Wiki;
 using TASVideos.MovieParsers.Result;
 
@@ -89,6 +90,8 @@ public class ViewModel(ApplicationDbContext db, IWikiPages wikiPages, IFileServi
 		public string? RejectionReasonDisplay { get; init; }
 		public string Title { get; init; } = "";
 		public string? AdditionalAuthors { get; init; }
+		public OptimizationMetric Metric { get; init; }
+		public string? MetricValue { get; init; }
 		public bool WarnStartType => StartType.HasValue && StartType != MovieStartType.PowerOn;
 		public int? TopicId { get; init; }
 		public int? GameId { get; init; }
@@ -102,5 +105,6 @@ public class ViewModel(ApplicationDbContext db, IWikiPages wikiPages, IFileServi
 		public string? AdditionalSyncNotes { get; init; }
 		public string? HashType { get; init; }
 		public string? Hash { get; init; }
+		public string? TASTime { get; init; }
 	}
 }
