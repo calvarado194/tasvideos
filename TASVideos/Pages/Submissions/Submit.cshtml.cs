@@ -65,15 +65,6 @@ public class SubmitModel(
 
 	public IEnumerable<string> MovieFileAccepts { get; init; } = movieParser.SupportedMovieExtensions;
 
-	public List<SelectListItem> AvailableOptimizationGoals { get; set; } = Enum.GetValues<OptimizationMetric>().ToList().ConvertAll<SelectListItem>(g =>
-	{
-		return new SelectListItem() {
-			Text = g.EnumDisplayName(),
-			Value = g.ToString(),
-			Selected = false
-		};
-	});
-
 	[BindProperty]
 	[MustBeTrue(ErrorMessage = "You must read and follow the instructions.")]
 	public bool AgreeToInstructions { get; init; }

@@ -77,7 +77,7 @@
 			</fieldset>
 			<fieldset>
 				<label asp-for="Submission.Metric"></label>
-				<select asp-for="Submission.Metric" asp-items="@Model.AvailableOptimizationGoals" data-id="metric"></select>
+				<select asp-for="Submission.Metric" asp-items="Html.GetEnumSelectList<OptimizationMetric>()" data-id="metric"></select>
 				<div>What your movie is optimized for. Can be time (such as in-game time or some speedrun timer) or score. By default, we use
 					TAS timing as measured by the site parser. 
 				</div>

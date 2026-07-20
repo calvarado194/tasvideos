@@ -34,19 +34,6 @@ public class EditModel(
 	public List<SelectListItem> AvailableClasses { get; set; } = [];
 	public List<SelectListItem> AvailableRejectionReasons { get; set; } = [];
 
-	public static readonly List<SelectListItem> AvailableOptimizationGoals { get; set; } = Enum.GetValues<OptimizationMetric>().Select(g => new SelectListItem {
-		Text = g.EnumDisplayName(),
-		Value = g.ToString(),
-		Selected = false,
-	}).ToList();
-	{
-		return new SelectListItem() {
-			Text = g.EnumDisplayName(),
-			Value = g.ToString(),
-			Selected = false
-		};
-	});
-
 	public async Task<IActionResult> OnGet()
 	{
 		var submission = await db.Submissions
