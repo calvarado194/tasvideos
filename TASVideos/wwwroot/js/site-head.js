@@ -88,7 +88,7 @@ window.addEventListener("DOMContentLoaded", function () {
 });
 
 function rate(pubId, unrated) {
-    const rating = unrated ? null : document.querySelector(`#rate-${pubId} #Rating_Rating`).value;
+    const rating = unrated ? null : document.querySelector(`#slider-${pubId}`).value;
     fetch(`/Publications/Rate/${pubId}?handler=Inline`, {
         method: 'POST',
         body: JSON.stringify(rating),

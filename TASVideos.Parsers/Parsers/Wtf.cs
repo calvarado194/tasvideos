@@ -7,8 +7,8 @@ internal class Wtf : Parser, IParser
 	{
 		var result = new SuccessResult(FileExtension)
 		{
-			Region = RegionType.Ntsc,
-			SystemCode = SystemCodes.Windows,
+			Region = RegionType.World,
+			SystemCode = SystemCodes.Pc,
 			Frames = (int)((length - 1024) / 8)
 		};
 

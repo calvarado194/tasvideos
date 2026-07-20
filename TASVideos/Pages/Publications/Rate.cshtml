@@ -8,14 +8,15 @@
 	<row>
 		<column class="text-center text-md-start">
 			<fieldset>
+				<div><span asp-validation-for="Rating"></span></div>
 				<span class="fs-4">Rating</span>
 				<span class="text-nowrap">
-					( <input type="checkbox" id="unrated" />
+					( <input type="checkbox" id="unrated"/>
 					<label for="unrated">Unrated</label> )
 				</span>
-				<br />
-				<input asp-for="Rating" class="fs-4 d-inline-block" style="width:4em;" min="0" max="10" value="@Model.Rating" step="0.1" />
-				<input id="entertainmentSlider" type="range" class="form-range mw-100 h-auto" style="width:15rem;" min="0" max="10" value="@Model.Rating" step="0.1" />
+				<br/>
+				<input asp-for="Rating" class="fs-4 d-inline-block" style="width:4em;" min="0" max="10" value="@Model.Rating" step="0.1"/>
+				<input id="entertainmentSlider" type="range" class="form-range mw-100 h-auto" style="width:15rem;" min="0" max="10" value="@Model.Rating" step="0.1"/>
 			</fieldset>
 		</column>
 	</row>

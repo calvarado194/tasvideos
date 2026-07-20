@@ -33,10 +33,14 @@ internal class Bk2 : Parser, IParser
 	{
 		var result = new SuccessResult(FileExtension)
 		{
-			Region = RegionType.Ntsc
+			Region = RegionType.NTSC
 		};
 
 		var archive = await file.OpenZipArchiveRead();
+		if (archive == null)
+		{
+			return InvalidFormat();
+		}
 
 		foreach (var entry in InvalidArchiveEntries)
 		{
@@ -102,13 +106,19 @@ internal class Bk2 : Parser, IParser
 
 			if (header.GetBoolFor(Keys.Pal))
 			{
-				result.Region = RegionType.Pal;
+				result.Region = RegionType.PAL;
 			}
 
 			// Some biz system ids do not match tasvideos, convert if needed
 			if (BizToTasvideosSystemIds.TryGetValue(platform, out var systemId))
 			{
 				platform = systemId;
+			}
+
+			// dosbox-x core can run several non-tv-based systems in addition to dos
+			if (platform == SystemCodes.Dos)
+			{
+				result.Region = RegionType.World;
 			}
 
 			// Check various subsystem flags
@@ -137,7 +147,7 @@ internal class Bk2 : Parser, IParser
 			else if (header.GetValueFor(Keys.Board) == SystemCodes.Sgb)
 			{
 				platform = SystemCodes.Sgb;
-				result.FrameRateOverride = result.Region == RegionType.Pal
+				result.FrameRateOverride = result.Region == RegionType.PAL
 					? PalSnesFramerate
 					: NtscSnesFramerate;
 			}
@@ -201,6 +211,17 @@ internal class Bk2 : Parser, IParser
 			var annotations = await reader.ReadToEndAsync();
 			if (!string.IsNullOrWhiteSpace(annotations))
 			{
+				using var lineReader = new StringReader(annotations);
+				var firstLine = await lineReader.ReadLineAsync();
+				if (firstLine!.StartsWith("platform:", StringComparison.InvariantCultureIgnoreCase))
+				{
+					var systemOverride = CalculatePlatformOverride(GetPlatformValue(firstLine));
+					if (systemOverride is not null)
+					{
+						result.SystemCode = systemOverride;
+					}
+				}
+
 				result.Annotations = annotations;
 			}
 		}
@@ -208,14 +229,28 @@ internal class Bk2 : Parser, IParser
 		// MapParsedResult() implies we only ever have a list of framerates for cores with framerate overrides, but it doesn't distinguish by core. nymashock has cycle count but octoshock has to rely on mednafen framerates for now. so we override with a constant for octoshock, to prevent picking random wrong values from nymashock overrides
 		if (core == "octoshock")
 		{
-			result.FrameRateOverride = result.Region == RegionType.Pal
+			result.FrameRateOverride = result.Region == RegionType.PAL
 				? PalPsxFramerate
 				: NtscPsxFramerate;
 		}
 
 		if (result.CycleCount.HasValue)
 		{
-			if (ValidClockRates.Contains(clockRate))
+			if (clockRate == "1000") // special case for a clock rate of 1000, which indicates that the cycle count is actually the millisecond count, so we ignore the parsed input frame count
+			{
+				try
+				{
+					result.Frames = checked((int)result.CycleCount.Value);
+				}
+				catch (OverflowException)
+				{
+					return Error("Cycle count value is too large to fit into the frame count integer");
+				}
+
+				result.CycleCount = null;
+				result.FrameRateOverride = 1000;
+			}
+			else if (ValidClockRates.Contains(clockRate))
 			{
 				var seconds = result.CycleCount.Value / double.Parse(clockRate, CultureInfo.InvariantCulture);
 				result.FrameRateOverride = result.Frames / seconds;
@@ -268,9 +303,9 @@ internal class Bk2 : Parser, IParser
 		"5369318.18181818", // SubNesHawk (NTSC)
 		"5320342.5", // SubNesHawk (PAL/Dendy)
 		"33868800", // NymaShock,
-		"1000", // DOSBox-x
 		"21477272.7272727", // SubBSNESv115+ (NTSC)
-		"21281370" // SubBSNESv115+ (PAL)
+		"21281370", // SubBSNESv115+ (PAL)
+		"16777216" // mGBA
 	];
 
 	private static readonly Dictionary<string, string> BizToTasvideosSystemIds = new()
@@ -314,4 +349,23 @@ internal class Bk2 : Parser, IParser
 		public const string VsyncAttoseconds = "vsyncattoseconds";
 		public const string Core = "core";
 	}
+
+	private static string GetPlatformValue(string str)
+	{
+		if (string.IsNullOrWhiteSpace(str))
+		{
+			return "";
+		}
+
+		var split = str.ToLower().SplitWithEmpty("platform:");
+		return split.Length == 1 ? split[0].Trim().ToLowerInvariant() : "";
+	}
+
+	private static string? CalculatePlatformOverride(string str)
+		=> typeof(SystemCodes)
+			.GetFields()
+			.Select(f => f.GetValue(f))
+			.Contains(str)
+			? str
+			: null;
 }

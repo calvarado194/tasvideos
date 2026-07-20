@@ -14,10 +14,14 @@ internal class Lsmv : Parser, IParser
 	{
 		var result = new SuccessResult(FileExtension)
 		{
-			Region = RegionType.Ntsc
+			Region = RegionType.NTSC
 		};
 
 		var archive = await file.OpenZipArchiveRead();
+		if (archive == null)
+		{
+			return InvalidFormat();
+		}
 
 		// a .lsmv is actually a savestate if a savestate file is present
 		if (archive.Entries.Any(e => e.Key is not null && e.Key.Equals(Savestate, StringComparison.InvariantCultureIgnoreCase)))
@@ -60,28 +64,28 @@ internal class Lsmv : Parser, IParser
 					case "bsxslotted":
 					case "sufamiturbo":
 						result.SystemCode = SystemCodes.Snes;
-						result.Region = RegionType.Ntsc;
+						result.Region = RegionType.NTSC;
 						break;
 					case "snes_pal":
 						result.SystemCode = SystemCodes.Snes;
-						result.Region = RegionType.Pal;
+						result.Region = RegionType.PAL;
 						break;
 					case "sgb_ntsc":
 						result.SystemCode = SystemCodes.Sgb;
-						result.Region = RegionType.Ntsc;
+						result.Region = RegionType.NTSC;
 						break;
 					case "sgb_pal":
 						result.SystemCode = SystemCodes.Sgb;
-						result.Region = RegionType.Pal;
+						result.Region = RegionType.PAL;
 						break;
 					case "gdmg":
 						result.SystemCode = SystemCodes.GameBoy;
-						result.Region = RegionType.Ntsc;
+						result.Region = RegionType.World;
 						break;
 					case "ggbc":
 					case "ggbca":
 						result.SystemCode = SystemCodes.Gbc;
-						result.Region = RegionType.Ntsc;
+						result.Region = RegionType.World;
 						break;
 				}
 			}
@@ -146,7 +150,7 @@ internal class Lsmv : Parser, IParser
 	private static void DefaultGameType(SuccessResult result)
 	{
 		result.SystemCode = SystemCodes.Snes;
-		result.Region = RegionType.Ntsc;
+		result.Region = RegionType.NTSC;
 		result.WarningList.Add(ParseWarnings.SystemIdInferred);
 		result.WarningList.Add(ParseWarnings.RegionInferred);
 	}

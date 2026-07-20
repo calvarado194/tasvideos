@@ -257,7 +257,7 @@ public class EditModel(
 		}
 
 		var result = await queueService.ClaimForJudging(Id, User.GetUserId(), User.Name());
-		SetMessage(result.Success, "", result.ErrorMessage ?? "Unable to claim");
+		SetMessage(result.Success, "Successfully claimed for judging.", result.ErrorMessage ?? "Unable to claim");
 
 		if (result.Success)
 		{
@@ -275,7 +275,7 @@ public class EditModel(
 		}
 
 		var result = await queueService.ClaimForPublishing(Id, User.GetUserId(), User.Name());
-		SetMessage(result.Success, "", result.ErrorMessage ?? "Unable to claim");
+		SetMessage(result.Success, "Successfully claimed for publishing.", result.ErrorMessage ?? "Unable to claim");
 
 		if (result.Success)
 		{

@@ -558,6 +558,10 @@ namespace TASVideos.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ContentType")
+                        .HasColumnType("integer")
+                        .HasColumnName("content_type");
+
                     b.Property<DateTime>("CreateTimestamp")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("create_timestamp");
@@ -2576,6 +2580,43 @@ namespace TASVideos.Data.Migrations
                         .HasName("pk_wiki_referrals");
 
                     b.ToTable("wiki_referrals", (string)null);
+                });
+
+            modelBuilder.Entity("TASVideos.Data.Entity.WikiRedirect", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateTimestamp")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("create_timestamp");
+
+                    b.Property<DateTime>("LastUpdateTimestamp")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("last_update_timestamp");
+
+                    b.Property<string>("PageNameFrom")
+                        .IsRequired()
+                        .HasColumnType("citext")
+                        .HasColumnName("page_name_from");
+
+                    b.Property<string>("PageNameTo")
+                        .IsRequired()
+                        .HasColumnType("citext")
+                        .HasColumnName("page_name_to");
+
+                    b.HasKey("Id")
+                        .HasName("pk_wiki_redirects");
+
+                    b.HasIndex("PageNameFrom")
+                        .IsUnique()
+                        .HasDatabaseName("ix_wiki_redirects_page_name_from");
+
+                    b.ToTable("wiki_redirects", (string)null);
                 });
 
             modelBuilder.Entity("TASVideos.Data.Entity.Awards.PublicationAward", b =>

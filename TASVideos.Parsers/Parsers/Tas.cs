@@ -12,8 +12,8 @@ internal class Tas : Parser, IParser
 	{
 		var result = new SuccessResult(FileExtension)
 		{
-			Region = RegionType.Ntsc,
-			SystemCode = SystemCodes.Celeste,
+			Region = RegionType.World,
+			SystemCode = SystemCodes.Pc,
 			FrameRateOverride = 1000.0 / 17.0
 		};
 
