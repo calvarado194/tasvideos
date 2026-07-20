@@ -748,6 +748,8 @@ internal class QueueService(
 				RerecordCount = submission.RerecordCount,
 				MovieFileName = movieFileName,
 				AdditionalAuthors = submission.AdditionalAuthors,
+				Metric = submission.Metric,
+				MetricValue = submission.MetricValue,
 				Submission = submission,
 				MovieFile = await fileService.CopyZip(submission.MovieFile, movieFileName),
 				GameGoalId = submission.GameGoalId
