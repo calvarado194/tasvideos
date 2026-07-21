@@ -129,30 +129,39 @@ public class Publication : BaseEntity, ITimeable
 		var title = $"{System.Code} {gameName}"
 					+ (!string.IsNullOrWhiteSpace(goal) ? $" \"{goal}\"" : "");
 
-		string? timeTitle;
+		string metricTitle;
+		var tasTime = "";
 		if (Metric.IsScore())
 		{
-			timeTitle = $" - Score {MetricValue}";
+			metricTitle = $" ({MetricValue})";
+			tasTime = $" in {this.Time().ToStringWithOptionalDaysAndHours()}";
 		}
 		else if (Metric.IsTimeOverride())
 		{
-			timeTitle = $" in {MetricValue}";
+			metricTitle = $" in {MetricValue}";
 		}
 		else
 		{
-			timeTitle = $" in {this.Time().ToStringWithOptionalDaysAndHours()}";
+			metricTitle = $" in {this.Time().ToStringWithOptionalDaysAndHours()}";
 		}
 
 		if (isYouTubeTitle)
 		{
-			return title + timeTitle
+			return title + metricTitle
 				+ $" by {string.Join(", ", authorList).LastCommaToAmpersand()}";
+		}
+
+		if (Metric.IsScore())
+		{
+			return title + metricTitle
+				+ $" by {string.Join(", ", authorList).LastCommaToAmpersand()}"
+				+ tasTime;
 		}
 
 		return
 			title
 			+ $" by {string.Join(", ", authorList).LastCommaToAmpersand()}"
-			+ timeTitle;
+			+ metricTitle;
 	}
 }
 

@@ -24,6 +24,8 @@ public class TabularMovieList(ApplicationDbContext db) : WikiViewComponent
 				Goal = p.GameGoal!.DisplayName,
 				Authors = p.Authors.OrderBy(pa => pa.Ordinal).Select(pa => pa.Author!.UserName),
 				AdditionalAuthors = p.AdditionalAuthors,
+				Metric = p.Metric,
+				MetricValue = p.MetricValue,
 				Screenshot = p.Files
 					.Where(f => f.Type == FileType.Screenshot)
 					.Select(f => new MovieEntry.ScreenshotFile(f.Path, f.Description))
@@ -45,6 +47,8 @@ public class TabularMovieList(ApplicationDbContext db) : WikiViewComponent
 		public string? AdditionalAuthors { get; init; }
 		public int Frames { get; init; }
 		public double FrameRate { get; init; }
+		public OptimizationMetric Metric { get; init; }
+		public string? MetricValue { get; init; }
 		public ScreenshotFile Screenshot { get; init; } = null!;
 
 		public record ScreenshotFile(string Path, string? Description);

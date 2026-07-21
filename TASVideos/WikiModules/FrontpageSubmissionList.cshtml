@@ -9,7 +9,7 @@
 						<div class="px-2 w-100">
 							<row class="align-items-center">
 								<div class="col-auto px-1 fs-sm-5 d-flex">
-									<span class="badge bg-info">@(sub.Time().ToStringWithOptionalDaysAndHours())</span>
+									<span class="badge bg-info">@(sub.Metric != OptimizationMetric.TASTiming ? sub.MetricValue + " (" + sub.Metric.EnumDisplayName() + ")" : sub.Time().ToStringWithOptionalDaysAndHours())</span>
 								</div>
 								<div class="col-auto px-1">
 									<span class="text-body-tertiary">@sub.System</span>

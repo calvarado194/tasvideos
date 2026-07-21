@@ -275,5 +275,7 @@ public static class SubmissionExtensions
 			.Include(s => s.Game)
 			.Include(s => s.GameVersion)
 			.Include(s => s.GameGoal)
+			.Include(s => s.Metric)
+			.Include(s => s.MetricValue)
 			.Include(gg => gg.GameGoal);
 }
