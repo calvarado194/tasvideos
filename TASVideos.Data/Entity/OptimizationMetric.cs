@@ -17,20 +17,20 @@ public enum OptimizationMetric
 
 public static class OptimizationMetricExtensions
 {
-	extension(OptimizationMetric criteria)
+	extension(OptimizationMetric metric)
 	{
 		public bool IsTime() =>
-			criteria is OptimizationMetric.TASTiming
+			metric is OptimizationMetric.TASTiming
 				or OptimizationMetric.RTATiming
 				or OptimizationMetric.InGameTiming;
 
 		public bool IsScore() =>
-			criteria is OptimizationMetric.HighScore;
+			metric is OptimizationMetric.HighScore;
 
 		public bool IsAscendingOrder() =>
-			criteria is OptimizationMetric.HighScore;
+			metric is OptimizationMetric.HighScore;
 
 		public bool IsTimeOverride() =>
-			criteria is not OptimizationMetric.TASTiming;
+			metric is not OptimizationMetric.TASTiming;
 	}
 }

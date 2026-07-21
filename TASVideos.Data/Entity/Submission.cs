@@ -60,8 +60,9 @@ public class Submission : BaseEntity, ITimeable
 	// The thing that the movie has primarily being optimized for
 	public OptimizationMetric Metric { get; set; } = OptimizationMetric.TASTiming;
 
-	// The reported value the movie achieved on that reported criteria. This is either time (measured to miliseconds) or score (as an integer number)
-	public string? MetricValue { get; set; }
+	// The reported value the movie achieved on that reported metric.
+	// This is either time (measured to miliseconds) or score (as an integer number)
+	public string MetricValue { get; set; } = "";
 
 	public Publication? Publication { get; set; }
 
@@ -275,7 +276,5 @@ public static class SubmissionExtensions
 			.Include(s => s.Game)
 			.Include(s => s.GameVersion)
 			.Include(s => s.GameGoal)
-			.Include(s => s.Metric)
-			.Include(s => s.MetricValue)
 			.Include(gg => gg.GameGoal);
 }

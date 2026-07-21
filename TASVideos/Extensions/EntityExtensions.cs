@@ -398,7 +398,6 @@ public static class EntityExtensions
 				Emulator = s.EmulatorVersion,
 				FrameCount = s.Frames,
 				FrameRate = s.SystemFrameRate!.FrameRate,
-				TASTime = TimeSpan.FromSeconds(s.Frames / s.SystemFrameRate!.FrameRate).ToStringWithOptionalDaysAndHours(),
 				RerecordCount = s.RerecordCount,
 				Date = s.CreateTimestamp,
 				Submitter = s.Submitter!.UserName,

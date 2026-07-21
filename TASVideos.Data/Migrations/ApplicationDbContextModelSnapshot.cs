@@ -1187,6 +1187,7 @@ namespace TASVideos.Data.Migrations
                         .HasColumnName("metric");
 
                     b.Property<string>("MetricValue")
+                        .IsRequired()
                         .HasColumnType("citext")
                         .HasColumnName("metric_value");
 
@@ -1759,6 +1760,7 @@ namespace TASVideos.Data.Migrations
                         .HasColumnName("metric");
 
                     b.Property<string>("MetricValue")
+                        .IsRequired()
                         .HasColumnType("citext")
                         .HasColumnName("metric_value");
 

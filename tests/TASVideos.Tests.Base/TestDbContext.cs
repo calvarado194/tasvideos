@@ -219,7 +219,9 @@ public class TestDbContext(DbContextOptions<ApplicationDbContext> options, TestD
 			GameGoal = gameGoal,
 			PublicationClass = publicationClass,
 			Submission = submission,
-			MovieFileName = submission.Id.ToString()
+			MovieFileName = submission.Id.ToString(),
+			Metric = OptimizationMetric.TASTiming,
+			MetricValue = ""
 		});
 		PublicationAuthors.Add(new PublicationAuthor { Author = author, Publication = pubRecord.Entity });
 		SaveChanges();
