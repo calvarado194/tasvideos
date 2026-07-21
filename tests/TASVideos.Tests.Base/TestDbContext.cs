@@ -1,4 +1,5 @@
 using System.Security.Principal;
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -151,7 +152,7 @@ public class TestDbContext(DbContextOptions<ApplicationDbContext> options, TestD
 		return role;
 	}
 
-	public EntityEntry<Submission> CreatePublishableSubmission()
+	public EntityEntry<Submission> CreatePublishableSubmission(OptimizationMetric metric = OptimizationMetric.TASTiming, string metricValue = "")
 	{
 		var entry = AddAndSaveUnpublishedSubmission();
 		var submission = entry.Entity;
@@ -167,6 +168,8 @@ public class TestDbContext(DbContextOptions<ApplicationDbContext> options, TestD
 		submission.GameVersion = gameVersion;
 		submission.GameGoal = gameGoal;
 		submission.IntendedClass = pubClass;
+		submission.Metric = metric;
+		submission.MetricValue = metricValue;
 
 		SaveChanges();
 		return entry;

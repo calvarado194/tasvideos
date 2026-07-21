@@ -165,7 +165,10 @@ public class EditModelTests : TestDbBase
 	}
 
 	[TestMethod]
-	public async Task OnPost_ValidEdit_UpdatesSubmissionAndRedirects()
+	[DataRow(OptimizationMetric.RTATiming, "12:34.56")]
+	[DataRow(OptimizationMetric.InGameTiming, "12:34.56")]
+	[DataRow(OptimizationMetric.HighScore, "123456")]
+	public async Task OnPost_ValidEdit_UpdatesSubmissionAndRedirects(OptimizationMetric metric, string metricValue)
 	{
 		var submission = _db.AddAndSaveUnpublishedSubmission().Entity;
 		submission.TopicId = 1;
@@ -179,7 +182,9 @@ public class EditModelTests : TestDbBase
 			Authors = ["UpdatedAuthor"],
 			Emulator = "Updated Emulator",
 			Goal = "Updated Goal",
-			RomName = "Updated ROM"
+			RomName = "Updated ROM",
+			Metric = metric,
+			MetricValue = metricValue,
 		};
 		_page.MarkupChanged = true;
 		_page.Markup = "Updated markup";
@@ -207,6 +212,8 @@ public class EditModelTests : TestDbBase
 		Assert.AreEqual("Updated Game", _page.Submission.GameName);
 		Assert.AreEqual("Updated Version", _page.Submission.GameVersion);
 		Assert.AreEqual("Updated Emulator", _page.Submission.Emulator);
+		Assert.AreEqual(metric, _page.Submission.Metric);
+		Assert.AreEqual(metricValue, _page.Submission.MetricValue);
 	}
 
 	[TestMethod]
