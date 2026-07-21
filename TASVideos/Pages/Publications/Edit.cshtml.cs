@@ -39,6 +39,8 @@ public class EditModel(
 				ObsoletedByTitle = p.ObsoletedBy != null ? p.ObsoletedBy.Title : null,
 				EmulatorVersion = p.EmulatorVersion,
 				ExternalAuthors = p.AdditionalAuthors,
+				Metric = p.Metric,
+				MetricValue = p.MetricValue,
 				Urls = p.PublicationUrls
 					.Select(u => new PublicationUrlDisplay(
 						u.Id, u.Url!, u.Type, u.DisplayName))
@@ -96,6 +98,8 @@ public class EditModel(
 			Publication.EmulatorVersion,
 			Publication.ExternalAuthors,
 			Publication.Authors,
+			Publication.Metric,
+			Publication.MetricValue,
 			Publication.SelectedFlags,
 			Publication.SelectedTags,
 			User.Permissions().ToList(),
@@ -138,6 +142,8 @@ public class EditModel(
 		public string MovieFileName { get; init; } = "";
 		public string? ExternalAuthors { get; init; }
 		public List<string> Authors { get; set; } = [];
+		public OptimizationMetric Metric { get; set; }
+		public string MetricValue { get; init; } = "";
 		public string PublicationClass { get; init; } = "";
 		public string? ClassIconPath { get; init; } = "";
 		public string ClassLink { get; init; } = "";
