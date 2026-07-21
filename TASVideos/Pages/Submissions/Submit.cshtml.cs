@@ -61,6 +61,7 @@ public class SubmitModel(
 	public OptimizationMetric Metric { get; init; } = OptimizationMetric.TASTiming;
 
 	[BindProperty]
+		[StringLength(24, ErrorMessage = "Cannot exceed 24 character in length.")]
 	public string? MetricValue { get; init; }
 
 	public IEnumerable<string> MovieFileAccepts { get; init; } = movieParser.SupportedMovieExtensions;
