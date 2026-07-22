@@ -303,4 +303,46 @@ public class SubmissionTests
 
 		Assert.AreEqual("#1111: 's NES Very Long Game in 1:00:00:00.000", submission.Title);
 	}
+
+	[TestMethod]
+	[DataRow(OptimizationMetric.InGameTiming, "21:23.330")]
+	[DataRow(OptimizationMetric.RTATiming, "59:27.31")]
+	public void GenerateTitle_TimeOptimizationMetrics_ShowsTimeOverride(OptimizationMetric metric, string metricValue)
+	{
+		var submission = new Submission
+		{
+			Id = 1111,
+			GameName = "Celeste",
+			Frames = 216000, // 1 hour at 60 fps
+			System = new GameSystem { Code = "PC" },
+			SystemFrameRate = new GameSystemFrameRate { FrameRate = 60.0 },
+			Metric = metric,
+			MetricValue = metricValue
+		};
+
+		submission.GenerateTitle();
+
+		Assert.AreEqual("#1111: 's PC Celeste in " + metricValue, submission.Title);
+	}
+
+	[TestMethod]
+	[DataRow(OptimizationMetric.HighScore, "2,116,350")]
+	[DataRow(OptimizationMetric.LowScore, "229,298")]
+	public void GenerateTitle_ScoreOptimizationMetrics_ShowsScoreAndTime(OptimizationMetric metric, string metricValue)
+	{
+		var submission = new Submission
+		{
+			Id = 1111,
+			GameName = "Sayonara Wild Hearts",
+			Frames = 216000, // 1 hour at 60 fps
+			System = new GameSystem { Code = "PC" },
+			SystemFrameRate = new GameSystemFrameRate { FrameRate = 60.0 },
+			Metric = metric,
+			MetricValue = metricValue,
+		};
+
+		submission.GenerateTitle();
+
+		Assert.AreEqual("#1111: 's PC Sayonara Wild Hearts (" + metricValue + ") in 1:00:00.000", submission.Title);
+	}
 }

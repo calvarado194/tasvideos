@@ -302,4 +302,48 @@ public class PublicationTests
 
 		Assert.AreEqual("NES Test Game by  in 00:30.000", publication.Title);
 	}
+
+	[TestMethod]
+	[DataRow(OptimizationMetric.InGameTiming, "21:23.330")]
+	[DataRow(OptimizationMetric.RTATiming, "59:27.31")]
+	public void GenerateTitle_TimeOptimizationMetrics_ShowsTimeOverride(OptimizationMetric metric, string metricValue)
+	{
+		var publication = new Publication
+		{
+			Id = 1212,
+			Frames = 1800,
+			System = new GameSystem { Code = "PC" },
+			SystemFrameRate = new GameSystemFrameRate { FrameRate = 60.0 },
+			Game = new Game { DisplayName = "Celeste" },
+			GameGoal = new GameGoal { DisplayName = "" },
+			Metric = metric,
+			MetricValue = metricValue
+		};
+
+		publication.Title = publication.GenerateTitle();
+
+		Assert.AreEqual("PC Celeste by  in " + metricValue, publication.Title);
+	}
+
+	[TestMethod]
+	[DataRow(OptimizationMetric.HighScore, "2,116,350")]
+	[DataRow(OptimizationMetric.LowScore, "229,298")]
+	public void GenerateTitle_ScoreOptimizationMetrics_ShowsScoreAndTime(OptimizationMetric metric, string metricValue)
+	{
+		var publication = new Publication
+		{
+			Id = 1312,
+			Frames = 1800,
+			System = new GameSystem { Code = "PC" },
+			SystemFrameRate = new GameSystemFrameRate { FrameRate = 60.0 },
+			Game = new Game { DisplayName = "Sayonara Wild Hearts" },
+			GameGoal = new GameGoal { DisplayName = "" },
+			Metric = metric,
+			MetricValue = metricValue
+		};
+
+		publication.Title = publication.GenerateTitle();
+
+		Assert.AreEqual("PC Sayonara Wild Hearts (" + metricValue + ") by  in 00:30.000", publication.Title);
+	}
 }
