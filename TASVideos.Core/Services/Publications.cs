@@ -219,7 +219,7 @@ internal class Publications(
 					queriedPub.CreateTimestamp,
 					url.Url!,
 					url.DisplayName,
-					queriedPub.Title,
+					queriedPub.GenerateTitle(true),
 					obsoletedWiki!,
 					queriedPub.System!.Code,
 					queriedPub.Authors.OrderBy(pa => pa.Ordinal).Select(a => a.Author!.UserName),
