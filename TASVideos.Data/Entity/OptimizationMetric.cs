@@ -13,6 +13,8 @@ public enum OptimizationMetric
 
 	[Display(Name = "Maximum Score")]
 	HighScore,
+	[Display(Name = "Minimum Score")]
+	LowScore,
 }
 
 public static class OptimizationMetricExtensions
@@ -25,7 +27,8 @@ public static class OptimizationMetricExtensions
 				or OptimizationMetric.InGameTiming;
 
 		public bool IsScore() =>
-			metric is OptimizationMetric.HighScore;
+			metric is OptimizationMetric.HighScore
+				or OptimizationMetric.LowScore;
 
 		public bool IsAscendingOrder() =>
 			metric is OptimizationMetric.HighScore;
