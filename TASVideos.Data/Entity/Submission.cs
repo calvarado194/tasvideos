@@ -155,7 +155,7 @@ public class Submission : BaseEntity, ITimeable
 			Title =
 			$"#{Id}: {string.Join(", ", authorList).LastCommaToAmpersand()}'s {System?.Code ?? "Unknown"} {gameName}"
 				+ (!string.IsNullOrWhiteSpace(goal) ? $" \"{goal}\"" : "")
-				+ $" in {MetricValue}";
+				+ $" in {MetricValue} {Metric.TitleTag()}";
 			return;
 		}
 

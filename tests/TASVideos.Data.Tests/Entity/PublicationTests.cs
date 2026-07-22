@@ -304,9 +304,9 @@ public class PublicationTests
 	}
 
 	[TestMethod]
-	[DataRow(OptimizationMetric.InGameTiming, "21:23.330")]
-	[DataRow(OptimizationMetric.RTATiming, "59:27.31")]
-	public void GenerateTitle_TimeOptimizationMetrics_ShowsTimeOverride(OptimizationMetric metric, string metricValue)
+	[DataRow(OptimizationMetric.InGameTiming, "21:23.330", "PC Celeste by  in 21:23.330 (IGT)")]
+	[DataRow(OptimizationMetric.RTATiming, "59:27.31", "PC Celeste by  in 59:27.31 (RTA)")]
+	public void GenerateTitle_TimeOptimizationMetrics_ShowsTimeOverride(OptimizationMetric metric, string metricValue, string expectedTitle)
 	{
 		var publication = new Publication
 		{
@@ -322,7 +322,7 @@ public class PublicationTests
 
 		publication.Title = publication.GenerateTitle();
 
-		Assert.AreEqual("PC Celeste by  in " + metricValue, publication.Title);
+		Assert.AreEqual(expectedTitle, publication.Title);
 	}
 
 	[TestMethod]
@@ -337,13 +337,13 @@ public class PublicationTests
 			System = new GameSystem { Code = "PC" },
 			SystemFrameRate = new GameSystemFrameRate { FrameRate = 60.0 },
 			Game = new Game { DisplayName = "Sayonara Wild Hearts" },
-			GameGoal = new GameGoal { DisplayName = "" },
+			GameGoal = new GameGoal { DisplayName = "maximum score" },
 			Metric = metric,
 			MetricValue = metricValue
 		};
 
 		publication.Title = publication.GenerateTitle();
 
-		Assert.AreEqual("PC Sayonara Wild Hearts (" + metricValue + ") by  in 00:30.000", publication.Title);
+		Assert.AreEqual("PC Sayonara Wild Hearts \"maximum score\" (" + metricValue + ") by  in 00:30.000", publication.Title);
 	}
 }

@@ -139,7 +139,7 @@ public class Publication : BaseEntity, ITimeable
 		}
 		else if (Metric.IsTimeOverride())
 		{
-			metricTitle = $" in {MetricValue}";
+			metricTitle = $" in {MetricValue} {Metric.TitleTag()}";
 		}
 		else
 		{

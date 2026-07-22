@@ -1,3 +1,5 @@
+using System.Net.NetworkInformation;
+
 namespace TASVideos.Data.Entity;
 
 public enum OptimizationMetric
@@ -35,5 +37,19 @@ public static class OptimizationMetricExtensions
 
 		public bool IsTimeOverride() =>
 			metric is not OptimizationMetric.TASTiming;
+
+		public string TitleTag()
+		{
+			if (metric == OptimizationMetric.RTATiming)
+			{
+				return "(RTA)";
+			}
+			else if (metric == OptimizationMetric.InGameTiming)
+			{
+				return "(IGT)";
+			}
+
+			return "";
+		}
 	}
 }
