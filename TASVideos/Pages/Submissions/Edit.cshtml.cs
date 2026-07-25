@@ -170,6 +170,8 @@ public class EditModel(
 			Submission.EncodeEmbedLink,
 			Submission.Authors,
 			Submission.ExternalAuthors,
+			Submission.Metric,
+			Submission.MetricValue,
 			Submission.Status,
 			MarkupChanged,
 			Markup,
@@ -322,6 +324,9 @@ public class EditModel(
 		[Url]
 		public string? EncodeEmbedLink { get; init; }
 		public List<string> Authors { get; set; } = [];
+		public OptimizationMetric Metric { get; set; }
+		[StringLength(24, ErrorMessage = "Cannot exceed 24 character in length.")]
+		public string? MetricValue { get; set; }
 		public string? Submitter { get; init; }
 		public DateTime SubmitDate { get; init; }
 		public SubmissionStatus Status { get; init; }

@@ -192,6 +192,18 @@
 				<label>@Model.Submission.HashType?.ToUpper() Hash</label>
 				<div>@Model.Submission.Hash</div>
 			</div>
+			<div class="sub-info-cell">
+				<label>Optimization Metric</label>
+				<div>@Model.Submission.Metric.EnumDisplayName()</div>
+			</div>
+			<div condition="!string.IsNullOrWhiteSpace(Model.Submission.MetricValue)" class="sub-info-cell">
+				<label>Final Time/Score</label>
+				<div>@Model.Submission.MetricValue</div>
+			</div>
+			<div condition="Model.Submission.Metric != OptimizationMetric.TASTiming" class="sub-info-cell">
+				<label>TAS Time</label>
+				<div>@(TimeSpan.FromSeconds(Model.Submission.FrameCount / Model.Submission.FrameRate).ToStringWithOptionalDaysAndHours())</div>
+			</div>
 		</div>
 
 		<div condition="!string.IsNullOrWhiteSpace(Model.Submission.Annotations)" class="sub-info-cell mb-2">

@@ -331,6 +331,8 @@ public static class EntityExtensions
 				Goal = s.GameGoal != null ? s.GameGoal.DisplayName : s.Branch,
 				By = s.SubmissionAuthors.OrderBy(sa => sa.Ordinal).Select(sa => sa.Author!.UserName).ToList(),
 				AdditionalAuthors = s.AdditionalAuthors,
+				Metric = s.Metric,
+				MetricValue = s.MetricValue,
 				Date = s.CreateTimestamp,
 				Status = s.Status,
 				Judge = s.Judge != null ? s.Judge.UserName : null,
@@ -370,6 +372,8 @@ public static class EntityExtensions
 				IntendedPublicationClass = s.IntendedClassId,
 				RejectionReason = s.RejectionReasonId,
 				ExternalAuthors = s.AdditionalAuthors,
+				Metric = s.Metric,
+				MetricValue = s.MetricValue,
 				Title = s.Title,
 				Authors = s.SubmissionAuthors
 					.OrderBy(sa => sa.Ordinal)
@@ -415,6 +419,8 @@ public static class EntityExtensions
 					.Select(sa => sa.Author!.UserName)
 					.ToList(),
 				AdditionalAuthors = s.AdditionalAuthors,
+				Metric = s.Metric,
+				MetricValue = s.MetricValue,
 				TopicId = s.TopicId,
 				Warnings = s.Warnings,
 				CycleCount = s.CycleCount,

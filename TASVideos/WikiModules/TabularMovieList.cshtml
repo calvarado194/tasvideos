@@ -13,7 +13,7 @@
 						<div class="ms-3 w-100">
 							<row class="align-items-center">
 								<div class="col-auto px-1 fs-sm-5 d-flex">
-									<span class="badge bg-info">@(pub.Time().ToStringWithOptionalDaysAndHours())</span>
+									<span class="badge bg-info">@(pub.Metric != OptimizationMetric.TASTiming? pub.MetricValue + " (" + pub.Metric.EnumDisplayName() + ")" : pub.Time().ToStringWithOptionalDaysAndHours())</span>
 								</div>
 								<div class="col-auto px-1">
 									<span class="text-body-tertiary">@pub.System</span>

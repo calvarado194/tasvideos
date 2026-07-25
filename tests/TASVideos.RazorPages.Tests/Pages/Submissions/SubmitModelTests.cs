@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using Org.BouncyCastle.Ocsp;
 using TASVideos.Core.Services;
 using TASVideos.Core.Services.ExternalMediaPublisher;
 using TASVideos.Core.Services.Wiki;
@@ -208,6 +209,59 @@ public class SubmitModelTests : TestDbBase
 
 		// Verify announcement was sent
 		await _publisher.Received(1).Send(Arg.Any<Post>());
+	}
+
+	[TestMethod]
+	[DataRow(OptimizationMetric.RTATiming, "12:34.56")]
+	[DataRow(OptimizationMetric.InGameTiming, "12:34.56")]
+	[DataRow(OptimizationMetric.HighScore, "123456")]
+	public async Task OnPost_OptimizationMetrics_GetCorrect(OptimizationMetric metric, string metricValue)
+	{
+		var user = _db.AddUser("TestUser").Entity;
+		await _db.SaveChangesAsync();
+
+		var parseResult = Substitute.For<IParseResult>();
+		parseResult.Success.Returns(true);
+		parseResult.FileExtension.Returns("bk2");
+
+		_queueService.ParseMovieFileAndZip(Arg.Any<IFormFile>()).Returns((parseResult, new byte[] { 1, 2, 3 }));
+		_userManager.GetRequiredUser(Arg.Any<ClaimsPrincipal>()).Returns(user);
+		_userManager.Exists("TestUser").Returns(true);
+		_movieFormatDeprecator.IsDeprecated(".bk2").Returns(false);
+		_queueService.ExceededSubmissionLimit(user.Id).Returns((DateTime?)null);
+		_queueService.Submit(Arg.Any<SubmitRequest>()).Returns(new SubmitResult(null, 42, "", null));
+
+		_page = new SubmitModel(_userManager, _movieFormatDeprecator, _queueService, _wikiPages, _publisher, _movieParser)
+		{
+			GameName = "Test Game",
+			RomName = "test.nes",
+			Markup = "Test submission content",
+			AgreeToInstructions = true,
+			AgreeToLicense = true,
+			MovieFile = CreateMockMovieFile(),
+			Metric = metric,
+			MetricValue = metricValue,
+			Authors = ["TestUser"]
+		};
+		AddAuthenticatedUser(_page, user, [PermissionTo.SubmitMovies]);
+
+		var result = await _page.OnPost();
+
+		Assert.IsInstanceOfType<RedirectResult>(result);
+		var redirectResult = (RedirectResult)result;
+		Assert.AreEqual("/42S", redirectResult.Url);
+		Assert.AreEqual(metric, _page.Metric);
+		Assert.AreEqual(metricValue, _page.MetricValue);
+
+		// Verify QueueService was called with correct parameters
+		await _queueService.Received(1).Submit(Arg.Is<SubmitRequest>(req =>
+			req.GameName == "Test Game"
+			&& req.RomName == "test.nes"
+			&& req.Markup == "Test submission content"
+			&& req.Authors.Contains("TestUser")
+			&& req.Submitter == user
+			&& req.Metric == metric
+			&& req.MetricValue == metricValue));
 	}
 
 	[TestMethod]

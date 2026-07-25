@@ -82,6 +82,16 @@
 				<div>Only authors not registered for TASVideos should be listed here. If multiple authors, separate the names with a comma.</div>
 				<span asp-validation-for="Publication.ExternalAuthors"></span>
 			</fieldset>
+			<fieldset>
+				<label asp-for="Publication.Metric"></label>
+				<select asp-for="Publication.Metric" asp-items="Html.GetEnumSelectList<OptimizationMetric>()" data-id="metric"></select>
+				<span asp-validation-for="Publication.Metric"></span>
+			</fieldset>
+			<fieldset>
+				<label>Final Time/Score</label>
+				<input asp-for="Publication.MetricValue" placeholder="Example: 21:23.330, 1:14:04.44 or 284,581,040" />
+				<span asp-validation-for="Publication.MetricValue"></span>
+			</fieldset>
 		</column>
 	</row>
 	<fieldset>
