@@ -77,8 +77,8 @@ public class Publication : BaseEntity, ITimeable
 	public OptimizationMetric Metric { get; set; } = OptimizationMetric.TASTiming;
 
 	// The reported value the movie achieved on that reported metric.
-	// This is either time (measured to miliseconds) or score (as an integer number)
-	public string MetricValue { get; set; } = "";
+	// This is either time (measured to milliseconds) or score (as an integer number)
+	public string? MetricValue { get; set; }
 
 	/// <summary>
 	/// Gets or sets Any author's that are not a user. If they are a user, they should be linked, and not listed here.

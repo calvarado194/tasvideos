@@ -14,8 +14,8 @@ using TASVideos.Data;
 namespace TASVideos.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260721195523_AltTimingMigration")]
-    partial class AltTimingMigration
+    [Migration("20260725154934_AddSubAltTiming")]
+    partial class AddSubAltTiming
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1190,7 +1190,6 @@ namespace TASVideos.Data.Migrations
                         .HasColumnName("metric");
 
                     b.Property<string>("MetricValue")
-                        .IsRequired()
                         .HasColumnType("citext")
                         .HasColumnName("metric_value");
 
@@ -1763,7 +1762,6 @@ namespace TASVideos.Data.Migrations
                         .HasColumnName("metric");
 
                     b.Property<string>("MetricValue")
-                        .IsRequired()
                         .HasColumnType("citext")
                         .HasColumnName("metric_value");
 

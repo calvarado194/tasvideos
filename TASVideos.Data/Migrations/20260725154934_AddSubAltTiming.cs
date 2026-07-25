@@ -5,7 +5,7 @@
 namespace TASVideos.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AltTimingMigration : Migration
+    public partial class AddSubAltTiming : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,8 +21,7 @@ namespace TASVideos.Data.Migrations
                 name: "metric_value",
                 table: "submissions",
                 type: "citext",
-                nullable: false,
-                defaultValue: "");
+                nullable: true);
 
             migrationBuilder.AddColumn<int>(
                 name: "metric",
@@ -35,8 +34,7 @@ namespace TASVideos.Data.Migrations
                 name: "metric_value",
                 table: "publications",
                 type: "citext",
-                nullable: false,
-                defaultValue: "");
+                nullable: true);
         }
 
         /// <inheritdoc />

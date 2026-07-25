@@ -104,7 +104,7 @@ public class EditModel(
 				CurrentStatus = s.Status,
 				CreateDate = s.CreateTimestamp,
 				IsSynced = s.SyncedOn != null,
-				RejectionReason = s.RejectionReason
+				s.RejectionReason
 			})
 			.SingleOrDefaultAsync();
 
@@ -291,10 +291,7 @@ public class EditModel(
 
 		var subInfo = await db.Submissions
 			.Where(s => s.Id == Id)
-			.Select(s => new
-			{
-				RejectionReason = s.RejectionReason
-			})
+			.Select(s => new { s.RejectionReason })
 			.SingleOrDefaultAsync();
 		if (subInfo is not null && subInfo.RejectionReason is not null && !User.Has(PermissionTo.RejectionReasonMaintenance))
 		{

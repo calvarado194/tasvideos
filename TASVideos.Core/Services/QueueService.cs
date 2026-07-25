@@ -1088,7 +1088,7 @@ public record UpdateSubmissionRequest(
 	List<string> Authors,
 	string? ExternalAuthors,
 	OptimizationMetric Metric,
-	string MetricValue,
+	string? MetricValue,
 	SubmissionStatus Status,
 	bool MarkupChanged,
 	string? Markup,
