@@ -143,8 +143,9 @@ public class EditModel(
 		public string? ExternalAuthors { get; init; }
 		public List<string> Authors { get; set; } = [];
 		public OptimizationMetric Metric { get; set; }
+
 		[StringLength(24, ErrorMessage = "Cannot exceed 24 character in length.")]
-		public string MetricValue { get; init; } = "";
+		public string? MetricValue { get; init; } = "";
 		public string PublicationClass { get; init; } = "";
 		public string? ClassIconPath { get; init; } = "";
 		public string ClassLink { get; init; } = "";
