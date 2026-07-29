@@ -307,6 +307,7 @@ public class SubmissionTests
 	[TestMethod]
 	[DataRow(OptimizationMetric.InGameTiming, "21:23.330", "#1111: 's PC Celeste in 21:23.330 (IGT)")]
 	[DataRow(OptimizationMetric.RTATiming, "59:27.31", "#1111: 's PC Celeste in 59:27.31 (RTA)")]
+	[DataRow(OptimizationMetric.ConsoleTiming, "59:27.31", "#1111: 's PC Celeste in 59:27.31 (Console Timing)")]
 	public void GenerateTitle_TimeOptimizationMetrics_ShowsTimeOverride(OptimizationMetric metric, string metricValue, string expectedTitle)
 	{
 		var submission = new Submission
