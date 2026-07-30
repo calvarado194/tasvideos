@@ -82,6 +82,12 @@ public class IndexModel(ApplicationDbContext db, IGameSystemService gameSystemSe
 		public double FrameRate { get; init; }
 
 		[TableIgnore]
+		public OptimizationMetric Metric { get; init; }
+
+		[TableIgnore]
+		public string? MetricValue { get; init; }
+
+		[TableIgnore]
 		public string? Judge { get; init; }
 
 		[TableIgnore]

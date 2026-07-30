@@ -146,6 +146,8 @@ public class ViewModelTests : TestDbBase
 		sub.SystemFrameRate = pub.Entity.SystemFrameRate;
 		sub.Game = pub.Entity.Game;
 		sub.GameVersion = pub.Entity.GameVersion;
+		sub.Metric = pub.Entity.Metric;
+		sub.MetricValue = pub.Entity.MetricValue;
 		_db.SaveChanges();
 
 		return sub;

@@ -1,4 +1,6 @@
 using System.Globalization;
+using Microsoft.ClearScript.JavaScript;
+using Npgsql.Internal;
 using TASVideos.Core.Services.Wiki;
 using TASVideos.MovieParsers;
 
@@ -54,6 +56,13 @@ public class SubmitModel(
 	[BindProperty]
 	[Required]
 	public IFormFile? MovieFile { get; init; }
+
+	[BindProperty]
+	public OptimizationMetric Metric { get; init; } = OptimizationMetric.TASTiming;
+
+	[BindProperty]
+	[StringLength(24, ErrorMessage = "Cannot exceed 24 character in length.")]
+	public string? MetricValue { get; init; }
 
 	public IEnumerable<string> MovieFileAccepts { get; init; } = movieParser.SupportedMovieExtensions;
 
@@ -125,6 +134,8 @@ public class SubmitModel(
 			EncodeEmbeddedLink,
 			Authors,
 			ExternalAuthors,
+			Metric,
+			MetricValue,
 			Markup,
 			zippedMovieFileBytes,
 			parseResult,

@@ -104,7 +104,7 @@ public class EditModel(
 				CurrentStatus = s.Status,
 				CreateDate = s.CreateTimestamp,
 				IsSynced = s.SyncedOn != null,
-				RejectionReason = s.RejectionReason
+				s.RejectionReason
 			})
 			.SingleOrDefaultAsync();
 
@@ -170,6 +170,8 @@ public class EditModel(
 			Submission.EncodeEmbedLink,
 			Submission.Authors,
 			Submission.ExternalAuthors,
+			Submission.Metric,
+			Submission.MetricValue,
 			Submission.Status,
 			MarkupChanged,
 			Markup,
@@ -289,10 +291,7 @@ public class EditModel(
 
 		var subInfo = await db.Submissions
 			.Where(s => s.Id == Id)
-			.Select(s => new
-			{
-				RejectionReason = s.RejectionReason
-			})
+			.Select(s => new { s.RejectionReason })
 			.SingleOrDefaultAsync();
 		if (subInfo is not null && subInfo.RejectionReason is not null && !User.Has(PermissionTo.RejectionReasonMaintenance))
 		{
@@ -322,6 +321,9 @@ public class EditModel(
 		[Url]
 		public string? EncodeEmbedLink { get; init; }
 		public List<string> Authors { get; set; } = [];
+		public OptimizationMetric Metric { get; set; }
+		[StringLength(24, ErrorMessage = "Cannot exceed 24 character in length.")]
+		public string? MetricValue { get; set; }
 		public string? Submitter { get; init; }
 		public DateTime SubmitDate { get; init; }
 		public SubmissionStatus Status { get; init; }

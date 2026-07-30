@@ -958,7 +958,7 @@ public class QueueServiceTests : TestDbBase
 		Assert.AreEqual("External Author 1,External Author 2", actualSub.AdditionalAuthors);
 	}
 
-	private static SubmitRequest CreateValidSubmitRequest(User submitter, string systemCode, IParseResult? customParseResult = null)
+	private static SubmitRequest CreateValidSubmitRequest(User submitter, string systemCode, IParseResult? customParseResult = null, OptimizationMetric metric = OptimizationMetric.TASTiming, string metricValue = "")
 	{
 		var parseResult = customParseResult ?? new TestParseResult
 		{
@@ -979,6 +979,8 @@ public class QueueServiceTests : TestDbBase
 			Emulator: "FCEUX 2.6.4",
 			EncodeEmbeddedLink: null,
 			Authors: [submitter.UserName],
+			Metric: metric,
+			MetricValue: metricValue,
 			ExternalAuthors: null,
 			Markup: "Test submission markup content",
 			MovieFile: "MOVIE_FILE_CONTENT"u8.ToArray(),
@@ -1330,6 +1332,8 @@ public class QueueServiceTests : TestDbBase
 		string? encodeEmbedLink = null,
 		List<string>? authors = null,
 		string? externalAuthors = null,
+		OptimizationMetric metric = OptimizationMetric.TASTiming,
+		string metricValue = "",
 		SubmissionStatus status = New,
 		bool markupChanged = false,
 		string? markup = null,
@@ -1351,6 +1355,8 @@ public class QueueServiceTests : TestDbBase
 			encodeEmbedLink,
 			authors ?? ["TestAuthor"],
 			externalAuthors,
+			metric,
+			metricValue,
 			status,
 			markupChanged,
 			markup,

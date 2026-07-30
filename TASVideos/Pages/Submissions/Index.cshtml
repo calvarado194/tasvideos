@@ -52,7 +52,11 @@
 			<td>@item.System</td>
 			<td><sub-link id="item.Id">@item.Game</sub-link></td>
 			<td>@(item.Goal == "baseline" ? "" : item.Goal)</td>
-			<td>@(item.Time.ToStringWithOptionalDaysAndHours())</td>
+			<td>@(item.Metric != OptimizationMetric.TASTiming ? item.MetricValue : item.Time.ToStringWithOptionalDaysAndHours()) 
+				<small condition="item.Metric != OptimizationMetric.TASTiming ">
+					(@(item.Metric != OptimizationMetric.TASTiming ? item.Metric.EnumDisplayName() : ""))
+				</small>
+				</td>
 			<td><author-list authors="item.By" additional-authors="@item.AdditionalAuthors"></author-list></td>
 			<td><timezone-convert asp-for="@item.Date" date-only="true" /></td>
 			<td>

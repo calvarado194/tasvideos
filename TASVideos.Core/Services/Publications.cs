@@ -265,6 +265,8 @@ internal class Publications(
 		publication.ObsoletedById = request.ObsoletedBy;
 		publication.EmulatorVersion = request.EmulatorVersion;
 		publication.AdditionalAuthors = request.ExternalAuthors.NormalizeCsv();
+		publication.Metric = request.Metric;
+		publication.MetricValue = request.MetricValue;
 
 		publication.Authors.Clear();
 		publication.Authors.AddRange(await db.Users
@@ -378,6 +380,8 @@ public record UpdatePublicationRequest(
 	string? EmulatorVersion,
 	string? ExternalAuthors,
 	List<string> Authors,
+	OptimizationMetric Metric,
+	string MetricValue,
 	List<int> SelectedFlags,
 	List<int> SelectedTags,
 	List<PermissionTo> UserPermissions,
