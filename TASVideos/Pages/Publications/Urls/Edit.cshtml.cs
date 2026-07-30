@@ -70,6 +70,7 @@ public class EditUrlsModel(
 	public async Task<IActionResult> OnPost()
 	{
 		var publication = await db.Publications
+			.IncludeTitleTables()
 			.Where(p => p.Id == PublicationId)
 			.SingleOrDefaultAsync();
 
