@@ -15,8 +15,12 @@ public enum OptimizationMetric
 
 	[Display(Name = "Maximum Score")]
 	HighScore,
+
 	[Display(Name = "Minimum Score")]
 	LowScore,
+
+	[Display(Name = "Console Timing")]
+	ConsoleTiming
 }
 
 public static class OptimizationMetricExtensions
@@ -26,7 +30,8 @@ public static class OptimizationMetricExtensions
 		public bool IsTime() =>
 			metric is OptimizationMetric.TASTiming
 				or OptimizationMetric.RTATiming
-				or OptimizationMetric.InGameTiming;
+				or OptimizationMetric.InGameTiming
+				or OptimizationMetric.ConsoleTiming;
 
 		public bool IsScore() =>
 			metric is OptimizationMetric.HighScore
@@ -47,6 +52,10 @@ public static class OptimizationMetricExtensions
 			else if (metric == OptimizationMetric.InGameTiming)
 			{
 				return "(IGT)";
+			}
+			else if (metric == OptimizationMetric.ConsoleTiming)
+			{
+				return "(Console Timing)";
 			}
 
 			return "";
