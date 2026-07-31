@@ -70,16 +70,8 @@ public class EditUrlsModel(
 	public async Task<IActionResult> OnPost()
 	{
 		var publication = await db.Publications
+			.IncludeTitleTables()
 			.Where(p => p.Id == PublicationId)
-			.Select(p => new
-			{
-				Title,
-				p.CreateTimestamp,
-				p.PublicationUrls,
-				SystemCode = p.System!.Code,
-				Authors = p.Authors.OrderBy(pa => pa.Ordinal).Select(pa => pa.Author!.UserName),
-				p.ObsoletedById
-			})
 			.SingleOrDefaultAsync();
 
 		if (publication is null)
@@ -135,10 +127,10 @@ public class EditUrlsModel(
 					publication.CreateTimestamp,
 					CurrentUrl,
 					AltTitle,
-					publication.Title,
+					publication.GenerateTitle(true),
 					publicationWiki!,
-					publication.SystemCode,
-					publication.Authors,
+					publication.System!.Code,
+					publication.Authors.OrderBy(pa => pa.Ordinal).Select(pa => pa.Author!.UserName),
 					publication.ObsoletedById);
 				await youtubeSync.SyncYouTubeVideo(video);
 			}
