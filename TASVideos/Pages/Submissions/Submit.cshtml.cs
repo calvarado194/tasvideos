@@ -74,6 +74,8 @@ public class SubmitModel(
 	[MustBeTrue(ErrorMessage = "You must agree to the license.")]
 	public bool AgreeToLicense { get; init; }
 
+	public bool AgreeToEncode { get; init; }
+
 	public string BackupSubmissionDeterminator { get; set; } = "";
 
 	public async Task<IActionResult> OnGet()
@@ -137,6 +139,7 @@ public class SubmitModel(
 			Metric,
 			MetricValue,
 			Markup,
+			AgreeToEncode,
 			zippedMovieFileBytes,
 			parseResult,
 			await userManager.GetRequiredUser(User));

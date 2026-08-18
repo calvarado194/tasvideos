@@ -64,6 +64,8 @@ public class Submission : BaseEntity, ITimeable
 	// This is either time (measured to milliseconds) or score (as an integer number)
 	public string? MetricValue { get; set; }
 
+	public bool AgreeToEncode { get; set; } = true;
+
 	public Publication? Publication { get; set; }
 
 	public int Frames { get; set; }

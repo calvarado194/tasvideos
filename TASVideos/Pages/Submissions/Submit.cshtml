@@ -111,7 +111,7 @@
 			</div>
 		</fieldset>
 	</fullrow>
-	<row class="text-center justify-content-center mb-1 fs-6">
+	<row class="text-left justify-content-left mb-1 fs-6">
 		<div class="col-auto">
 			<div class="form-check">
 				<input asp-for="AgreeToInstructions" class="form-check-input" />
@@ -121,13 +121,23 @@
 			</div>
 		</div>
 	</row>
-	<row class="text-center justify-content-center mb-3 fs-6">
+	<row class="text-left justify-content-left mb-1 fs-6">
 		<div class="col-auto">
 			<div class="form-check">
-				<input asp-for="AgreeToLicense" class="form-check-input" />
+				<input asp-for="AgreeToLicense" class="form-check-input"/>
 				<label asp-for="AgreeToLicense" class="form-check-label">I agree to publishing this content under the <a href="https://creativecommons.org/licenses/by/2.0/">Creative Commons Attribution 2.0</a> license.</label>
 				<br />
 				<span asp-validation-for="AgreeToLicense"></span>
+			</div>
+		</div>
+	</row>
+	<row class="text-left justify-content-left mb-3 fs-6">
+		<div class="col-auto">
+			<div class="form-check">
+				<input asp-for="AgreeToEncode" class="form-check-input" checked/>
+				<label asp-for="AgreeToEncode" class="form-check-label">I authorize TASVideos to upload an encode of this submission to their YouTube channel in the event it is accepted for publication.</label>
+				<br />
+				<span asp-validation-for="AgreeToEncode"></span>
 			</div>
 		</div>
 	</row>

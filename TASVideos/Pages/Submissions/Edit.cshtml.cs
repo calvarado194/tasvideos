@@ -34,6 +34,8 @@ public class EditModel(
 	public List<SelectListItem> AvailableClasses { get; set; } = [];
 	public List<SelectListItem> AvailableRejectionReasons { get; set; } = [];
 
+	public bool AgreeToEncode { get; init; }
+
 	public async Task<IActionResult> OnGet()
 	{
 		var submission = await db.Submissions
@@ -175,6 +177,7 @@ public class EditModel(
 			Submission.Status,
 			MarkupChanged,
 			Markup,
+			Submission.AgreeToEncode,
 			Submission.RevisionMessage,
 			HttpContext.Request.MinorEdit(),
 			User.GetUserId());
@@ -331,5 +334,6 @@ public class EditModel(
 		public string? Publisher { get; init; }
 		public string? ExternalAuthors { get; init; }
 		public string Title { get; init; } = "";
+		public bool AgreeToEncode { get; init; } = false;
 	}
 }

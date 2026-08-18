@@ -983,6 +983,7 @@ public class QueueServiceTests : TestDbBase
 			MetricValue: metricValue,
 			ExternalAuthors: null,
 			Markup: "Test submission markup content",
+			AgreeToEncode: true,
 			MovieFile: "MOVIE_FILE_CONTENT"u8.ToArray(),
 			ParseResult: parseResult,
 			Submitter: submitter);
@@ -1337,6 +1338,7 @@ public class QueueServiceTests : TestDbBase
 		SubmissionStatus status = New,
 		bool markupChanged = false,
 		string? markup = null,
+		bool agreeToEncode = true,
 		string? revisionMessage = null,
 		bool minorEdit = false,
 		int userId = 1)
@@ -1360,6 +1362,7 @@ public class QueueServiceTests : TestDbBase
 			status,
 			markupChanged,
 			markup,
+			agreeToEncode,
 			revisionMessage,
 			minorEdit,
 			userId);

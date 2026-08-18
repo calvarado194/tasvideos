@@ -1026,6 +1026,7 @@ public record SubmitRequest(
 	OptimizationMetric Metric,
 	string MetricValue,
 	string Markup,
+	bool AgreeToEncode,
 	byte[] MovieFile,
 	IParseResult ParseResult,
 	User Submitter);
@@ -1092,6 +1093,7 @@ public record UpdateSubmissionRequest(
 	SubmissionStatus Status,
 	bool MarkupChanged,
 	string? Markup,
+	bool AgreeToEncode,
 	string? RevisionMessage,
 	bool MinorEdit,
 	int UserId);

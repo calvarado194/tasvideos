@@ -374,6 +374,7 @@ public static class EntityExtensions
 				ExternalAuthors = s.AdditionalAuthors,
 				Metric = s.Metric,
 				MetricValue = s.MetricValue,
+				AgreeToEncode = s.AgreeToEncode,
 				Title = s.Title,
 				Authors = s.SubmissionAuthors
 					.OrderBy(sa => sa.Ordinal)
